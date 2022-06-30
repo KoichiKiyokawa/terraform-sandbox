@@ -3,7 +3,7 @@ WORKDIR /go/workspace
 COPY . .
 RUN GOOS=linux GOARCH=amd64 go build cmd/server.go
 
-FROM alpine
-COPY --from=builder /go/workspace/server /
+FROM busybox
+COPY --from=builder /go/workspace/server /server
 EXPOSE 8080
 CMD ["/server"]
