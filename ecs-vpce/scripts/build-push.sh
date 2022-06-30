@@ -7,7 +7,7 @@ export CONTAINER_REGISTORY_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws
 
 aws ecr get-login-password | docker login --username AWS --password-stdin https://${CONTAINER_REGISTORY_URI}
 
-pushd ../nginx
+pushd ./nginx
   export URI1=${NGINX_REGISTORY_URI}:latest
   export URI2=${NGINX_REGISTORY_URI}:${IMAGE_TAG}
 
@@ -19,7 +19,7 @@ pushd ../nginx
   export IMAGE_NGINX_URI=${URI2}
 popd
 
-pushd ../app
+pushd ./app
   export URI1=${APP_REGISTORY_URI}:latest
   export URI2=${APP_REGISTORY_URI}:${IMAGE_TAG}
 
