@@ -1,10 +1,10 @@
-resource "aws_ecs_cluster" "cicd-bootcamp-cluster" {
-  name = "cicd-bootcamp-cluster"
+resource "aws_ecs_cluster" "cluster" {
+  name = "${local.project_name}-cluster"
 }
 
 
-resource "aws_ecs_task_definition" "cicd-bootcamp-task" {
-  family                   = "cicd-bootcamp-task"
+resource "aws_ecs_task_definition" "task" {
+  family                   = "${local.project_name}-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 4096
