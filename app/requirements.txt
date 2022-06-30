@@ -1,0 +1,6 @@
+flask
+pyrt
+pillow
+uwsgi
+numpy
+pep8
