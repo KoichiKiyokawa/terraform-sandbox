@@ -34,5 +34,5 @@ resource "aws_lb_target_group" "alb-tg" {
 }
 
 output "alb-url" {
-  value = aws_lb.alb.dns_name
+  value = "http://${aws_lb.alb.dns_name}"
 }
