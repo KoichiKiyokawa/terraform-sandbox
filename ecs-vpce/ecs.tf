@@ -67,7 +67,7 @@ resource "aws_ecs_service" "main" {
   }
 
   network_configuration {
-    subnets         = [aws_subnet.public-1a.id, aws_subnet.public-1c.id]
+    subnets         = [aws_subnet.private-1a.id, aws_subnet.private-1c.id]
     security_groups = [aws_security_group.web-sg.id]
   }
 }
