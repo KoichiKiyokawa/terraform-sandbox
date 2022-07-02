@@ -17,6 +17,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     cached_methods         = ["GET", "HEAD"]
     viewer_protocol_policy = "redirect-to-https"
     target_origin_id       = aws_s3_bucket.front.id
+    cache_policy_id = aws_cloudfront_cache_policy.cache_policy.id
 
     forwarded_values {
       query_string = false
@@ -37,3 +38,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 }
+
+resource "aws_cloudfront_cache_policy" "cache_policy"{
+  name = "compressed-policy"
+  min_ttl = 0
+  parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_brotli = true
+  }
+} 
