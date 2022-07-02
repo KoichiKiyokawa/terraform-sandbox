@@ -18,6 +18,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     cached_methods         = ["GET", "HEAD"]
     viewer_protocol_policy = "redirect-to-https"
     target_origin_id       = aws_s3_bucket.front.id
+    compress = true
     cache_policy_id        = aws_cloudfront_cache_policy.cache_policy.id
   }
 
