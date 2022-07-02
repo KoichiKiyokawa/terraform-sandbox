@@ -7,6 +7,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     domain_name = aws_s3_bucket.front.bucket_regional_domain_name
     origin_id   = aws_s3_bucket.front.id
 
+    # S3に直接アクセスできないようにOAIを設定する
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
     }
@@ -17,14 +18,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     cached_methods         = ["GET", "HEAD"]
     viewer_protocol_policy = "redirect-to-https"
     target_origin_id       = aws_s3_bucket.front.id
-    cache_policy_id = aws_cloudfront_cache_policy.cache_policy.id
-
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
+    cache_policy_id        = aws_cloudfront_cache_policy.cache_policy.id
   }
 
 
@@ -39,10 +33,21 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 }
 
-resource "aws_cloudfront_cache_policy" "cache_policy"{
-  name = "compressed-policy"
+resource "aws_cloudfront_cache_policy" "cache_policy" {
+  name    = "compressed-policy"
   min_ttl = 0
   parameters_in_cache_key_and_forwarded_to_origin {
+    # brotliでの圧縮を有効にする
     enable_accept_encoding_brotli = true
+    cookies_config {
+      cookie_behavior = "none"
+
+    }
+    headers_config {
+      header_behavior = "none"
+    }
+    query_strings_config {
+      query_string_behavior = "none"
+    }
   }
-} 
+}
