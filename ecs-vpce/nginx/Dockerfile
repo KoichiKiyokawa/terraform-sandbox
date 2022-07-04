@@ -1,4 +1,4 @@
-FROM nginx:1.17
+FROM nginx:1.23
 
 RUN apt update && \
     apt install -y && \
