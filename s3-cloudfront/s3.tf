@@ -1,4 +1,6 @@
 resource "aws_s3_bucket" "front" {
+  # バケット名は全アカウントで一意になる必要があるので、uuidをsuffixにする
+  # sh -c 'echo "s3-cloudfront-$(uuidgen)"'
   bucket = "s3-cloudfront-40e6b52b-aa09-f5a3-8f46-a16fb75170ea"
 
   tags = {
