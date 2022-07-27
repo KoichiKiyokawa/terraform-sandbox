@@ -1,7 +1,7 @@
 FROM golang:1.18 AS builder
 WORKDIR /go/workspace
 COPY . .
-RUN GOOS=linux GOARCH=amd64 go build cmd/server.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/server.go
 
 FROM busybox
 COPY --from=builder /go/workspace/server /server
