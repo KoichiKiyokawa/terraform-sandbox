@@ -25,6 +25,28 @@ resource "aws_s3_bucket_acl" "front_acl" {
   acl    = "private"
 }
 
+resource "aws_s3_bucket_policy" "front" {
+  bucket = aws_s3_bucket.front.id
+  policy = data.aws_iam_policy_document.s3_main_policy.json
+}
+
+data "aws_iam_policy_document" "s3_main_policy" {
+  # CloudFront Distribution からのアクセスのみ許可
+  statement {
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.front.arn}/*"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
+      values   = [aws_cloudfront_distribution.s3_distribution.arn]
+    }
+  }
+}
+
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "oac"
   description                       = "Origin Access Control"
