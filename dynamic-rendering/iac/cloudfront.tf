@@ -15,7 +15,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "Some comment"
+  comment             = "Dynamic rendering"
   default_root_object = "index.html"
 
   logging_config {
@@ -43,6 +43,16 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.bot_detection.arn
+    }
+
+    lambda_function_association {
+      event_type = "origin-request"
+      lambda_arn = aws_lambda_function.prerenderer.qualified_arn
+    }
   }
 
   price_class = "PriceClass_200"
@@ -60,4 +70,29 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   viewer_certificate {
     cloudfront_default_certificate = true
   }
+}
+
+# resource "null_resource" "build" {
+#   triggers = {
+#     always = timestamp()
+#   }
+#   provisioner "local-exec" {
+#     command     = "pnpm i && pnpm run build"
+#     working_dir = "${path.module}/../functions"
+#   }
+# }
+
+resource "local_file" "viewer_request_build_output" {
+  source   = "${path.module}/../functions/viewer-request.js"
+  filename = "${path.module}/../functions/viewer-request.js"
+  # depends_on = [
+  #   null_resource.build
+  # ]
+}
+
+resource "aws_cloudfront_function" "bot_detection" {
+  name    = "bot-detection"
+  runtime = "cloudfront-js-1.0"
+  publish = true
+  code    = file(local_file.viewer_request_build_output.source)
 }
