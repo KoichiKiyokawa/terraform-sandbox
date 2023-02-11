@@ -13,7 +13,7 @@
 		"deploy": "pnpm build && aws s3 sync build s3://dynamic-rendering-eoiajwofnalfn"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^1.0.0",
+		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-static": "1.0.0",
 		"@sveltejs/kit": "^1.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
