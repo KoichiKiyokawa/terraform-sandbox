@@ -11,7 +11,7 @@
   "devDependencies": {
     "@types/aws-cloudfront-function": "1.0.2",
     "@types/aws-lambda": "8.10.109",
-    "esbuild": "0.16.12",
+    "esbuild": "0.25.0",
     "typescript": "4.9.4"
   },
   "dependencies": {
